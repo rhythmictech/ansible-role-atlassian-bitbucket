@@ -1,0 +1,45 @@
+---
+
+bitbucket_base_url: CHANGE_ME
+
+bitbucket_cert:
+
+bitbucket_key:
+
+bitbucket_packages:
+    - curl-devel
+    - expat-devel
+    - gettext-devel
+    - openssl-devel
+    - zlib-devel
+    - gcc
+    - jq # for backups
+    - perl-ExtUtils-MakeMaker
+    - mod_ssl
+    - subversion # for SVN-to-GIT
+    - subversion-perl
+    - perl-TermReadKey
+
+# Backup related vars
+
+# The key used to clone the bitbucket backup repo from git
+bitbucket_backup_repo_sshkey:
+
+bitbucket_backup_repo_sshkey_file:
+bitbucket_backup_repo_url:
+bitbucket_backup_repo_dir:
+bitbucket_backup_repo_version:
+
+bitbucket_instance_name:
+bitbucket_home_dir:
+bitbucket_username:
+bitbucket_backup_user:
+bitbucket_backup_password:
+bitbucket_backup_excluded_repos: []
+
+bitbucket_backup_db_database:
+bitbucket_backup_db_host:
+bitbucket_backup_db_username:
+bitbucket_backup_db_password:
+
+bitbucket_backup_working_dir:
