@@ -3,13 +3,13 @@
 INSTANCE_NAME={{ bitbucket_instance_name }}
 
 # The base URL of the Bitbucket instance to be backed up. It cannot end on a '/'.
-BITBUCKET_URL=https://{{ bitbucket_base_url }}/
+BITBUCKET_URL={{ bitbucket_base_url }}
 
 # The path to the Bitbucket home directory (with trailing /)
 BITBUCKET_HOME={{ bitbucket_home_dir }}
 
-BITBUCKET_UID={{ bitbucket_username }}
-BITBUCKET_GID={{ bitbucket_username }}
+BITBUCKET_UID={{ bitbucket_user }}
+BITBUCKET_GID={{ bitbucket_group }}
 
 BACKUP_HOME_TYPE=rsync
 

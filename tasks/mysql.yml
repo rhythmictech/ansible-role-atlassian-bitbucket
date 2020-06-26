@@ -1,0 +1,45 @@
+---
+
+- name: atlassian-bitbucket | check if mysql driver is already installed
+  stat: path="/usr/src/mysql-connector-java-{{ bitbucket_mysql_driver_version }}"
+  register: mysql_found
+  when: bitbucket_install_mysql_driver
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | download/extract MySQL JDBC driver
+  unarchive:
+    src: "{{ bitbucket_mysql_driver_url }}"
+    dest: /usr/src
+    remote_src: yes
+  when: bitbucket_install_mysql_driver and mysql_found.stat.exists == false
+  tags: ['bitbucket']
+
+# this only needs to run if we are placing the driver, otherwise bitbucket
+# will create it automatically on first run.
+- name: atlassian-bitbucket | ensure bitbucket lib dir exists
+  file:
+    dest: "{{ bitbucket_data_dir }}/lib"
+    owner: "{{ bitbucket_user }}"
+    group: "{{ bitbucket_group }}"
+    mode: 0750
+    state: directory
+  when: bitbucket_install_mysql_driver
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | symlink JDBC driver
+  file:
+    src: "/usr/src/mysql-connector-java-{{ bitbucket_mysql_driver_version }}/mysql-connector-java-{{ bitbucket_mysql_driver_version }}.jar"
+    dest: "{{ bitbucket_data_dir }}/lib/mysql-connector-java.jar"
+    force: yes
+    owner: "root"
+    group: "{{ bitbucket_group }}"
+    state: link
+  when: bitbucket_install_mysql_driver
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | remove JDBC driver symlink
+  file:
+    src: "{{ bitbucket_data_dir }}/lib/mysql-connector-java.jar"
+    state: absent
+  when: not bitbucket_install_mysql_driver
+  tags: ['bitbucket']

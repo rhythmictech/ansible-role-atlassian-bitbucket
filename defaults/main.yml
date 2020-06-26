@@ -1,45 +1,111 @@
 ---
 
-bitbucket_base_url: CHANGE_ME
+########################################
+# Bitbucket Configuration
+########################################
+bitbucket_jvm_max_memory: "1g"
 
-bitbucket_cert:
+# by default, this will allow bitbucket to be configured through web UI
+bitbucket_place_config: False
 
-bitbucket_key:
+# If a bitbucket.properties file will be placed, it can have any number of
+# arguments as defined in documentation:
+#
+# https://confluence.atlassian.com/bitbucketserver/bitbucket-server-config-properties-776640155.html
+#
+# You must include setup section if using autosetup (see https://confluence.atlassian.com/bitbucketserver/automated-setup-for-bitbucket-server-776640098.html),
+# including a valid license key. Note that the license key could be based on an
+# expired license and/or different server ID.
+#
+# Sample config that uses the j2 database and only allows localhost binds:
+#
+# bitbucket_config:
+#   setup:
+#     displayName=displayName
+#     baseUrl= https://bitbucket.yourcompany.com
+#     license=AAAB...
+#     sysadmin.username=username
+#     sysadmin.password=password
+#     sysadmin.displayName=John Doe
+#     sysadmin.emailAddress=sysadmin@yourcompany.com
+#   jdbc:
+#     driver: org.h2.Driver
+#     url: jdbc:h2:${bitbucket.shared.home}/data/db;MVCC=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;TRACE_LEVEL_FILE=4
+#     username: sa
+#     password:
+#   server:
+#     address: 127.0.0.1
+bitbucket_config:
+
+########################################
+# Bitbucket First Run State
+########################################
+bitbucket_enable_service: False
+bitbucket_start_service: False
+
+# Wait on the server to startup before finishing the role
+# Note that this won't produce happy results if bitbucket_start_service is
+# false.
+bitbucket_wait_for_server_startup: False
+
+# Stop the service after initialization is completed
+bitbucket_stop_service: False
+
+########################################
+# Bitbucket Versions
+########################################
+bitbucket_version: "7.2.5"
+bitbucket_git_version: "2.27.0"
+
+########################################
+# Bitbucket Users/Dirs
+########################################
+bitbucket_group: bitbucket
+bitbucket_user: bitbucket
+
+bitbucket_atlassian_dir: /opt/atlassian
+bitbucket_base_dir: "{{ bitbucket_atlassian_dir }}/bitbucket"
+bitbucket_data_dir: "{{ bitbucket_atlassian_dir }}/data/bitbucket"
+
+########################################
+# Bitbucket Package Info
+########################################
+bitbucket_url: "https://product-downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-{{ bitbucket_version }}.tar.gz"
 
 bitbucket_packages:
     - curl-devel
     - expat-devel
+    - gcc
     - gettext-devel
+    - java-11-openjdk
+    - make
     - openssl-devel
     - zlib-devel
-    - gcc
-    - jq # for backups
-    - perl-ExtUtils-MakeMaker
-    - mod_ssl
-    - subversion # for SVN-to-GIT
-    - subversion-perl
-    - perl-TermReadKey
+    - jq  # for backups
 
-# Backup related vars
+########################################
+# Bitbucket DIY Backups
+########################################
 
-# The key used to clone the bitbucket backup repo from git
-bitbucket_backup_repo_sshkey:
+# Use DIY Backups?
+bitbucket_diybackup_enabled: False
 
-bitbucket_backup_repo_sshkey_file:
-bitbucket_backup_repo_url:
-bitbucket_backup_repo_dir:
-bitbucket_backup_repo_version:
+# Repo location/refspec
+bitbucket_diybackup_repo_url: "https://bitbucket.org/atlassianlabs/atlassian-bitbucket-diy-backup.git"
+# TODO this repo doesn't do releases, and that sucks
+bitbucket_diybackup_repo_version: "master"
 
-bitbucket_instance_name:
-bitbucket_home_dir:
-bitbucket_username:
-bitbucket_backup_user:
-bitbucket_backup_password:
-bitbucket_backup_excluded_repos: []
+# Base Dir
+bitbucket_diybackup_base_dir: /opt/atlassian/backup
 
-bitbucket_backup_db_database:
-bitbucket_backup_db_host:
-bitbucket_backup_db_username:
-bitbucket_backup_db_password:
+# Working directory
+bitbucket_diybackup_working_dir: /opt/atlassian/backup/working
 
-bitbucket_backup_working_dir:
+########################################
+# Bitbucket MySQL JDBC Driver
+########################################
+bitbucket_install_mysql_driver: False
+
+bitbucket_mysql_driver_version: 8.0.20
+
+bitbucket_mysql_driver_url: "https://cdn.mysql.com/Downloads/Connector-J/mysql-connector-java-{{ bitbucket_mysql_driver_version }}.tar.gz"

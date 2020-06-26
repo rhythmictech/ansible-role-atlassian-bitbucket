@@ -1,0 +1,23 @@
+---
+
+# this only needs to run if we are placing a config, otherwise bitbucket
+# will create it automatically on first run.
+- name: atlassian-bitbucket | ensure bitbucket config dir exists
+  file:
+    dest: "{{ bitbucket_data_dir }}/shared"
+    owner: "{{ bitbucket_user }}"
+    group: "{{ bitbucket_group }}"
+    mode: 0750
+    state: directory
+  when: bitbucket_place_config
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | place configuration
+  template:
+    src: bitbucket.properties.j2
+    dest: "{{ bitbucket_data_dir }}/shared/bitbucket.properties"
+    owner: "{{ bitbucket_user }}"
+    group: "{{ bitbucket_group }}"
+    mode: 0640
+  when: bitbucket_place_config
+  tags: ['bitbucket']
