@@ -1,13 +1,5 @@
 ---
 
-- set_fact: ansible_distribution_major_version=6
-  when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "NA"
-  tags: ['bitbucket']
-
-- set_fact: ansible_distribution_major_version=7
-  when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "2"
-  tags: ['bitbucket']
-
 - import_tasks: install.yml
   tags: ['bitbucket', 'bitbucket_install']
 
@@ -34,5 +26,5 @@
   wait_for:
     port: 7999
     timeout: 300
-  when: bitbucket_wait_for_server_startup
+  when: bitbucket_wait_for_server_initialization
   tags: ['bitbucket']
