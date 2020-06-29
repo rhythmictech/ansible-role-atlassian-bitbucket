@@ -28,6 +28,7 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
   - name: amazonlinux2
     image: docker.io/geerlingguy/docker-amazonlinux2-ansible
+    command: /sbin/init
     pre_build_image: true
     tmpfs:
       - /run
