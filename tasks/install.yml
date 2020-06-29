@@ -32,6 +32,11 @@
     - "{{ bitbucket_data_dir }}"
   tags: ['bitbucket']
 
+- name: Enable amazon-linux-extras packages
+  shell: "amazon-linux-extras enable java-openjdk11"
+  when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "2"
+  tags: ['bitbucket']
+
 - name: atlassian-bitbucket | ensure packages are installed
   yum: name="{{ bitbucket_packages }}" state=present
   tags: ['bitbucket']
