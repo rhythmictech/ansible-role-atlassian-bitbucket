@@ -8,7 +8,7 @@ lint: |
   yamllint .
 platforms:
   - name: centos7
-    image: docker.io/pycontribs/${MOLECULE_DISTRO:-centos:7}
+    image: docker.io/geerlingguy/docker-centos7-ansible
     pre_build_image: true
     command: /sbin/init
     tmpfs:
@@ -18,7 +18,7 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
   - name: centos8
     command: /sbin/init
-    image: docker.io/pycontribs/${MOLECULE_DISTRO:-centos:8}
+    image: docker.io/geerlingguy/docker-centos8-ansible
     pre_build_image: true
     privileged: true
     tmpfs:
@@ -27,8 +27,6 @@ platforms:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
   - name: amazonlinux2
-    #command: /usr/lib/systemd/systemd
-    dockerfile: Dockerfile.j22
     image: docker.io/geerlingguy/docker-amazonlinux2-ansible
     pre_build_image: true
     tmpfs:
@@ -38,7 +36,11 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
 provisioner:
   name: ansible
+  playbooks:
+    converge: ../resources/playbooks/converge.yml
+    verify: ../resources/playbooks/verify.yml
 scenario:
   name: default
 verifier:
   name: ansible
+  directory: ../resources/tests
