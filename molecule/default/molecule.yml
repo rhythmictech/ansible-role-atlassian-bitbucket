@@ -6,12 +6,31 @@ driver:
 lint: |
   set -e
   yamllint .
-  #ansible-lint
 platforms:
-  - name: instance
+  - name: centos7
     image: docker.io/pycontribs/${MOLECULE_DISTRO:-centos:7}
     pre_build_image: true
     command: /sbin/init
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  - name: centos8
+    command: /sbin/init
+    image: docker.io/pycontribs/${MOLECULE_DISTRO:-centos:8}
+    pre_build_image: true
+    privileged: true
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  - name: amazonlinux2
+    #command: /usr/lib/systemd/systemd
+    dockerfile: Dockerfile.j22
+    image: docker.io/geerlingguy/docker-amazonlinux2-ansible
+    pre_build_image: true
     tmpfs:
       - /run
       - /tmp

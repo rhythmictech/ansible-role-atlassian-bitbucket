@@ -1,0 +1,31 @@
+---
+# Note that a valid license key must be provided for this scenario to work.
+- name: Converge
+  hosts: none
+  vars:
+    bitbucket_start_service: True
+    bitbucket_enable_service: True
+    bitbucket_wait_for_server_startup: True
+    bitbucket_wait_for_server_initialization: True
+    bitbucket_place_config: True
+    bitbucket_config:
+      jdbc:
+        driver: org.h2.Driver
+        password: password
+        url: jdbc:h2:${bitbucket.shared.home}/data/db;MVCC=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;TRACE_LEVEL_FILE=4
+        username: sa
+      server:
+        address: 127.0.0.1
+      setup:
+        baseUrl: https://bitbucket.yourcompany.com
+        displayName: displayName
+        license: MUST_BE_VALID
+        sysadmin.displayName: John Doe
+        sysadmin.emailAddress: sysadmin@yourcompany.com
+        sysadmin.password: password
+        sysadmin.username: admin
+    bitbucket_install_mysql_driver: True
+  tasks:
+    - name: "Include ansible-role-atlassian-bitbucket"
+      include_role:
+        name: "ansible-role-atlassian-bitbucket"

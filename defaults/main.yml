@@ -48,6 +48,12 @@ bitbucket_start_service: False
 # false.
 bitbucket_wait_for_server_startup: False
 
+# Wait for the server to finish initilization after startup.
+# This is useful if you are attempting to use bitbucket auto setup.
+# This will _not_ work unless a valid license key is provided in
+# `bitbucket_config` above.
+bitbucket_wait_for_server_initialization: False
+
 # Stop the service after initialization is completed
 bitbucket_stop_service: False
 

@@ -50,3 +50,9 @@ service:
   bitbucket:
     enabled: true
     running: true
+
+http:
+  http://localhost:7990:
+    status: 200
+    headers:
+      - "Location: http://localhost:7990/dashboard"
