@@ -86,6 +86,7 @@ bitbucket_packages:
     - java-11-openjdk
     - make
     - openssl-devel
+    - tar
     - zlib-devel
     - jq  # for backups
 
