@@ -24,6 +24,6 @@ provisioner:
     converge: converge.yml
     verify: ../resources/playbooks/verify.yml
 scenario:
-  name: default
+  name: auto_setup
 verifier:
   name: ansible

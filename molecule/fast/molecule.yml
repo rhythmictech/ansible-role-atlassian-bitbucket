@@ -23,7 +23,7 @@ provisioner:
     converge: ../resources/playbooks/converge.yml
     verify: ../resources/playbooks/verify.yml
 scenario:
-  name: default
+  name: fast
 verifier:
   name: ansible
   directory: ../resources/tests
