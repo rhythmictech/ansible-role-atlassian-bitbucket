@@ -28,7 +28,7 @@
 
     - name: Find Goss tests on localhost
       find:
-        paths: "{{ playbook_dir }}/../tests"
+        paths: "{{ playbook_dir }}/tests"
         patterns:
           - "test*.yml"
       delegate_to: localhost
