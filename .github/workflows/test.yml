@@ -26,4 +26,4 @@ jobs:
       - name: molecule
         uses: robertdebock/molecule-action@2.4.0
         with:
-          command: --debug idempotence
+          command: --debug test
