@@ -3,18 +3,18 @@ name: Molecule Test
 
 on: [push]
 jobs:
-  # lint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: checkout
-  #       uses: actions/checkout@v2
-  #     - name: molecule
-  #       uses: robertdebock/molecule-action@2.4.0
-  #       with:
-  #         command: lint
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: molecule
+        uses: robertdebock/molecule-action@2.4.0
+        with:
+          command: lint
   test:
-    # needs:
-      # - lint
+    needs:
+      - lint
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -25,5 +25,3 @@ jobs:
           path: "${{ github.repository }}"
       - name: molecule
         uses: robertdebock/molecule-action@2.4.0
-        with:
-          command: --debug test
