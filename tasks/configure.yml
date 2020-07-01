@@ -12,6 +12,15 @@
   when: bitbucket_place_config
   tags: ['bitbucket']
 
+- name: get bitbucket config info
+  stat:
+    path: "{{ bitbucket_data_dir }}/shared/bitbucket.properties"
+    follow: yes
+  register: bitbucket_config_info
+
+- debug:
+    var: bitbucket_config_info
+
 - name: atlassian-bitbucket | place configuration
   template:
     src: bitbucket.properties.j2
