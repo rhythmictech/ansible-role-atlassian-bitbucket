@@ -39,7 +39,6 @@ provisioner:
   name: ansible
   playbooks:
     converge: ../resources/playbooks/converge.yml
-    idempotence: ../resources/playbooks/converge.yml
     verify: ../resources/playbooks/verify.yml
 scenario:
   name: default
