@@ -21,15 +21,15 @@
 - debug:
     var: bitbucket_config_info
 
-- name: atlassian-bitbucket | place configuration
-  template:
-    src: bitbucket.properties.j2
-    dest: "{{ bitbucket_data_dir }}/shared/bitbucket.properties"
-    owner: "{{ bitbucket_user }}"
-    group: "{{ bitbucket_group }}"
-    mode: 0640
-  when: bitbucket_place_config
-  tags: ['bitbucket']
+# - name: atlassian-bitbucket | place configuration
+#   template:
+#     src: bitbucket.properties.j2
+#     dest: "{{ bitbucket_data_dir }}/shared/bitbucket.properties"
+#     owner: "{{ bitbucket_user }}"
+#     group: "{{ bitbucket_group }}"
+#     mode: 0640
+#   when: bitbucket_place_config
+#   tags: ['bitbucket']
 
 - name: get bitbucket config info
   stat:
