@@ -1,3 +1,4 @@
+---
 - name: get bitbucket config info
   stat:
     path: "{{ bitbucket_data_dir }}/shared/bitbucket.properties"
