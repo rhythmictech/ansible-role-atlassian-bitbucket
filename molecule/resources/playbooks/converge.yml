@@ -14,13 +14,6 @@
         password: password
       server:
         address: 127.0.0.1
-      setup:
-        displayName: displayName
-        baseUrl: https://bitbucket.yourcompany.com
-        sysadmin.username: admin
-        sysadmin.password: password
-        sysadmin.displayName: John Doe
-        sysadmin.emailAddress: sysadmin@yourcompany.com
     bitbucket_install_mysql_driver: True
   tasks:
     - name: "Include ansible-role-atlassian-bitbucket"
