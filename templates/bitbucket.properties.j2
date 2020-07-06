@@ -1,0 +1,10 @@
+
+{% if bitbucket_config is defined %}
+{% for section in bitbucket_config.keys()|sort() %}
+
+# {{ section }}
+{% for item in bitbucket_config[section].keys()|sort() %}
+{{ section }}.{{ item }}={{ bitbucket_config[section][item] }}
+{% endfor %}
+{% endfor %}
+{% endif %}

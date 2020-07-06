@@ -1,0 +1,25 @@
+---
+
+- name: atlassian-bitbucket | ensure systemd service file exists
+  template:
+    src: etc.systemd.system.bitbucket.service.j2
+    dest: /etc/systemd/system/bitbucket.service
+    owner: root
+    group: root
+    mode: 0755
+  register: bitbucket_unit_file
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | reload systemd
+  shell: '/bin/systemctl daemon-reload'
+  when: bitbucket_unit_file.changed | default(False)
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | set service to desired enabled/disabled state
+  service: name=bitbucket enabled={{ bitbucket_enable_service }}
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | start bitbucket if desired
+  service: name=bitbucket state=started
+  when: bitbucket_start_service
+  tags: ['bitbucket']

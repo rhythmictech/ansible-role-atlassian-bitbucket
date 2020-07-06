@@ -1,0 +1,29 @@
+---
+
+- name: atlassian-bitbucket | ensure the bitbucket backup repo dest directory exists
+  file:
+    path: "{{ bitbucket_diybackup_base_dir }}"
+    state: directory
+  when: bitbucket_diybackup_enabled
+  tags: ['bitbucket', 'bitbucket_backup']
+
+- name: atlassian-bitbucket | clone the bitbucket DIY backup repo
+  environment:
+    TMPDIR: /root/tmp
+  git:
+    dest: "{{ bitbucket_diybackup_base_dir }}"
+    force: yes
+    repo: "{{ bitbucket_diybackup_repo_url }}"
+    version: "{{ bitbucket_diybackup_repo_version }}"
+  when: bitbucket_diybackup_enabled
+  tags: ['bitbucket', 'bitbucket_backup']
+
+- name: atlassian-bitbucket | place the bitbucket backup config
+  template:
+    src: diybackup.bitbucket.diy-backup.vars.sh.j2
+    dest: "{{ bitbucket_diybackup_base_dir }}/bitbucket.diy-backup.vars.sh"
+    mode: 0400
+  when: bitbucket_diybackup_enabled
+  tags: ['bitbucket', 'bitbucket_backup']
+
+# TODO cron this

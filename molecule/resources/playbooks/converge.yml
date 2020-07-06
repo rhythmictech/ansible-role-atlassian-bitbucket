@@ -1,0 +1,21 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    bitbucket_start_service: True
+    bitbucket_enable_service: True
+    bitbucket_wait_for_server_startup: True
+    bitbucket_place_config: True
+    bitbucket_config:
+      jdbc:
+        driver: org.h2.Driver
+        url: jdbc:h2:${bitbucket.shared.home}/data/db;MVCC=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;TRACE_LEVEL_FILE=4
+        username: sa
+        password: password
+      server:
+        address: 127.0.0.1
+    bitbucket_install_mysql_driver: True
+  tasks:
+    - name: "Include ansible-role-atlassian-bitbucket"
+      include_role:
+        name: "ansible-role-atlassian-bitbucket"

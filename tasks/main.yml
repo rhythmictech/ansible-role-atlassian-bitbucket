@@ -1,122 +1,30 @@
 ---
 
-- name: ensure stash/git packages are installed
-  yum: name="{{ bitbucket_packages }}" state=present
+- import_tasks: install.yml
+  tags: ['bitbucket', 'bitbucket_install']
 
+- import_tasks: configure.yml
+  tags: ['bitbucket', 'bitbucket_configure']
+
+- import_tasks: service.yml
+  tags: ['bitbucket', 'bitbucket_service']
+
+- import_tasks: backup.yml
+  tags: ['bitbucket', 'bitbucket_backup']
+
+- import_tasks: mysql.yml
+  tags: ['bitbucket', 'bitbucket_mysql']
+
+- name: atlassian-bitbucket | wait for server to start up
+  wait_for:
+    port: 7990
+    timeout: 300
+  when: bitbucket_wait_for_server_startup
   tags: ['bitbucket']
 
-- name: ensure git is not installed via rpm
-  yum: name=git state=absent
-  tags: ['bitbucket']
-
-- name: check if git is already installed
-  stat: path=/usr/bin/git
-  register: git_found
-  tags: ['bitbucket']
-
-- name: copy git source
-  get_url: url=https://www.kernel.org/pub/software/scm/git/git-2.4.11.tar.gz dest=/usr/src/git-2.4.11.tar.gz
-  when: git_found.stat.exists == false
-  tags: ['bitbucket']
-
-- name: untar git
-  shell: "tar zx -C /usr/src -f /usr/src/git-2.4.11.tar.gz"
-  when: git_found.stat.exists == false
-  tags: ['bitbucket']
-
-- name: build git
-  shell: "cd /usr/src/git-2.4.11 && make prefix=/usr all install"
-  when: git_found.stat.exists == false
-  tags: ['bitbucket']
-
-- name: ensure bitbucket cert is in place
-  copy: content="{{ bitbucket_cert }}" dest="/etc/pki/tls/certs/bitbucket.crt" mode=0640 owner=root group=root
-  tags: ['bitbucket', 'certificates']
-
-- name: ensure bitbucket key is in place
-  copy: content="{{ bitbucket_key }}" dest="/etc/pki/tls/private/bitbucket.key" mode=0640 owner=root group=root
-  tags: ['bitbucket', 'certificates']
-
-- name: ensure bitbucket cert chain is in place
-  copy: content="{{ bitbucket_ssl_chain }}" dest="/etc/pki/tls/certs/bitbucket-bundle.crt" mode=0640 owner=root group=root
-  when: bitbucket_ssl_use_chain
-  tags: ['bitbucket', 'certificates']
-
-- name: ensure bitbucket httpd config is in place
-  template:
-    src: etc.httpd.conf.d.bitbucket.conf.j2
-    dest: /etc/httpd/conf.d/bitbucket.conf
-    owner: root
-    group: root
-    mode: 0640
-  register: reload httpd
-  tags: ['bitbucket']
-
-- name: create the ssh directory
-  file:
-    path: "{{ item }}"
-    mode: 0700
-    state: directory
-  with_items:
-    - /root/.ssh
-    - /root/tmp
-  tags: ['bitbucket']
-
-- name: place the bitbucket git repo key
-  copy:
-    content: "{{ bitbucket_backup_repo_sshkey }}"
-    dest: "{{ bitbucket_backup_repo_sshkey_file }}"
-    mode: 0400
-  no_log: yes
-  tags: ['bitbucket']
-
-- name: place the bitbucket ssh config
-  template:
-    src: root.ssh.config.j2
-    dest: /root/.ssh/config
-    mode: 0400
-  tags: ['bitbucket']
-
-- name: ensure the bitbucket backup repo dest directory exists
-  file:
-    path: "{{ bitbucket_backup_repo_dir }}"
-    state: directory
-  tags: ['bitbucket']
-
-- name: clone the bitbucket repo
-  environment:
-    TMPDIR: /root/tmp
-  git:
-    accept_hostkey: yes
-    dest: "{{ bitbucket_backup_repo_dir }}"
-    force: yes
-    key_file: "{{ bitbucket_backup_repo_sshkey_file }}"
-    repo: "{{ bitbucket_backup_repo_url }}"
-    version: "{{ bitbucket_backup_repo_version }}"
-  tags: ['bitbucket']
-
-- name: place the bitbucket backup config
-  template:
-    src: opt.bitbucket-backup.bitbucket.diy-backup.vars.sh.j2
-    dest: "{{ bitbucket_backup_repo_dir }}/bitbucket.diy-backup.vars.sh"
-    mode: 0400
-  tags: ['bitbucket']
-
-- name: ensure mysql community repo is installed
-  template:
-    src: etc.yum.repos.d.mysql.repo.j2
-    dest: /etc/yum.repos.d/mysql.repo
-    owner: root
-    group: root
-    mode: 0640
-  tags: ['bitbucket']
-
-- name: ensure mysql community gpg is installed
-  copy: src=etc.pki.rpm-gpg.RPM-GPG-KEY-mysql dest=/etc/pki/rpm-gpg/RPM-GPG-KEY-mysql owner=root group=root mode=0640
-  tags: ['bitbucket']
-
-- name: ensure packages are installed
-  yum: name={{ item }} state=present
-  with_items:
-    - "mysql-community-client"
+- name: atlassian-bitbucket | wait for server to initialize
+  wait_for:
+    port: 7999
+    timeout: 300
+  when: bitbucket_wait_for_server_initialization
   tags: ['bitbucket']

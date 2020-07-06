@@ -1,0 +1,84 @@
+---
+
+- name: atlassian-bitbucket | ensure group exists
+  group:
+    name: "{{ bitbucket_group }}"
+
+- name: atlassian-bitbucket | ensure user exists
+  user:
+    name: "{{ bitbucket_user }}"
+    group: "{{ bitbucket_group }}"
+    shell: /bin/bash
+
+- name: atlassian-bitbucket | ensure bitbucket system dirs exist
+  file:
+    dest: "{{ item }}"
+    owner: root
+    group: "{{ bitbucket_group }}"
+    mode: 0750
+    state: directory
+  with_items:
+    - "{{ bitbucket_base_dir }}"
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | ensure bitbucket data dirs exist
+  file:
+    dest: "{{ item }}"
+    owner: "{{ bitbucket_user }}"
+    group: "{{ bitbucket_group }}"
+    mode: 0750
+    state: directory
+  with_items:
+    - "{{ bitbucket_data_dir }}"
+  tags: ['bitbucket']
+
+- name: Enable amazon-linux-extras packages
+  shell: "amazon-linux-extras enable java-openjdk11"
+  changed_when: false
+  when: ansible_distribution == "Amazon" and ansible_distribution_major_version == "2"
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | ensure packages are installed
+  yum: name="{{ bitbucket_packages }}" state=present
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | check if git is already installed
+  stat: path=/usr/local/bin/git
+  register: git_found
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | download/extract git source
+  unarchive:
+    src: https://www.kernel.org/pub/software/scm/git/git-{{ bitbucket_git_version }}.tar.gz
+    dest: /usr/src
+    remote_src: yes
+  when: git_found.stat.exists == false
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | build/install git source
+  shell: "cd /usr/src/git-{{ bitbucket_git_version }} && make prefix=/usr/local all install"
+  when: git_found.stat.exists == false
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | check if desired version is already installed
+  stat: path="{{ bitbucket_base_dir }}/atlassian-bitbucket-{{ bitbucket_version }}"
+  register: bitbucket_found
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | download/extract bitbucket source
+  unarchive:
+    src: "{{ bitbucket_url }}"
+    dest: "{{ bitbucket_base_dir }}"
+    remote_src: yes
+  when: bitbucket_found.stat.exists == false
+  tags: ['bitbucket']
+
+- name: atlassian-bitbucket | ensure symlink to latest version exists
+  file:
+    src: "{{ bitbucket_base_dir }}/atlassian-bitbucket-{{ bitbucket_version }}"
+    dest: "{{ bitbucket_base_dir }}/current"
+    force: yes
+    owner: "root"
+    group: "{{ bitbucket_group }}"
+    state: link
+  tags: ['bitbucket']
