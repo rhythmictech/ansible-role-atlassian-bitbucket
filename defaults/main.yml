@@ -36,6 +36,8 @@ bitbucket_place_config: False
 #   server:
 #     address: 127.0.0.1
 bitbucket_config:
+  server:
+    address: 0.0.0.0
 
 ########################################
 # Bitbucket First Run State
