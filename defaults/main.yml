@@ -81,16 +81,16 @@ bitbucket_data_dir: "{{ bitbucket_atlassian_dir }}/data/bitbucket"
 bitbucket_url: "https://product-downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-{{ bitbucket_version }}.tar.gz"
 
 bitbucket_packages:
-    - curl-devel
-    - expat-devel
-    - gcc
-    - gettext-devel
-    - java-11-openjdk
-    - make
-    - openssl-devel
-    - tar
-    - zlib-devel
-    - jq  # for backups
+  - curl-devel
+  - expat-devel
+  - gcc
+  - gettext-devel
+  - java-11-openjdk
+  - make
+  - openssl-devel
+  - tar
+  - zlib-devel
+  - jq  # for backups
 
 ########################################
 # Bitbucket DIY Backups
