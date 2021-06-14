@@ -81,16 +81,16 @@ bitbucket_data_dir: "{{ bitbucket_atlassian_dir }}/data/bitbucket"
 bitbucket_url: "https://product-downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-{{ bitbucket_version }}.tar.gz"
 
 bitbucket_packages:
-    - curl-devel
-    - expat-devel
-    - gcc
-    - gettext-devel
-    - java-11-openjdk
-    - make
-    - openssl-devel
-    - tar
-    - zlib-devel
-    - jq  # for backups
+  - curl-devel
+  - expat-devel
+  - gcc
+  - gettext-devel
+  - java-11-openjdk
+  - make
+  - openssl-devel
+  - tar
+  - zlib-devel
+  - jq  # for backups
 
 ########################################
 # Bitbucket DIY Backups
@@ -117,4 +117,4 @@ bitbucket_install_mysql_driver: False
 
 bitbucket_mysql_driver_version: 8.0.20
 
-bitbucket_mysql_driver_url: "https://cdn.mysql.com/Downloads/Connector-J/mysql-connector-java-{{ bitbucket_mysql_driver_version }}.tar.gz"
+bitbucket_mysql_driver_url: "https://github.com/mysql/mysql-connector-j/archive/refs/tags/{{ bitbucket_mysql_driver_version }}.tar.gz"
