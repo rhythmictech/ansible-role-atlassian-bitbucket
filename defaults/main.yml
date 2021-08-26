@@ -117,4 +117,4 @@ bitbucket_install_mysql_driver: False
 
 bitbucket_mysql_driver_version: 8.0.20
 
-bitbucket_mysql_driver_url: "https://github.com/mysql/mysql-connector-j/archive/refs/tags/{{ bitbucket_mysql_driver_version }}.tar.gz"
+bitbucket_mysql_driver_url: "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-{{ bitbucket_mysql_driver_version }}.tar.gz"
